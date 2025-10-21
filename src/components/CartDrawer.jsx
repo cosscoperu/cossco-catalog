@@ -6,7 +6,7 @@ export default function CartDrawer({cart,onRemove,onQty}){
   const lines=cart.map(it=>`• ${it.title} × ${it.qty}`).join('%0A')
   const msg=`Hola 👋, me interesa adquirir los siguientes productos:%0A${lines}%0A%0ATotal estimado: S/ ${total.toFixed(2)}%0A%0AEnviado desde el catálogo oficial de COSSCO — Solo productos de lujo.`
   const wa=`https://wa.me/${number}?text=${msg}`
-  return (<div className="fixed bottom-4 right-4 z-30">
+  return <div className="sticky bottom-4 right-4 z-30 md:fixed md:bottom-4 md:right-4">
     <div className="w-72 rounded-2xl border border-plateado/40 bg-white shadow-suave">
       <div className="border-b border-plateado/30 p-3 font-semibold">Tu pedido</div>
       <div className="max-h-64 space-y-3 overflow-auto p-3">
