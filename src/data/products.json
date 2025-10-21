@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Taza blanca 11oz",
+    "price": "S/ 5.50",
+    "image": "/img/taza.jpg"
+  },
+  {
+    "title": "Polo Dry-Fit",
+    "price": "S/ 25.00",
+    "image": "/img/polera.jpg"
+  },
+  {
+    "title": "Cojín sublimable 40x40",
+    "price": "S/ 9.90",
+    "image": "/img/cojin.jpg"
+  },
+  {
+    "title": "Tomatodo metálico",
+    "price": "S/ 18.50",
+    "image": "/img/tomatodo.jpg"
+  },
+  {
+    "title": "Mouse pad",
+    "price": "S/ 6.90",
+    "image": "/img/mousepad.jpg"
+  }
+]
