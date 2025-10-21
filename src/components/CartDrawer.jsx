@@ -1,65 +1,56 @@
 import React, { useState } from "react";
 
-// Función para convertir precios en número
 function parsePrice(p) {
   if (!p) return 0;
   const m = String(p).replace(",", ".").match(/([0-9]+(?:\.[0-9]+)?)/);
   return m ? parseFloat(m[1]) : 0;
 }
 
-// Componente principal del carrito
 export default function CartDrawer({ cart, onRemove, onQty }) {
   const [minimized, setMinimized] = useState(false);
-
-  // Cálculo del total
   const total = cart.reduce((s, it) => s + parsePrice(it.price) * it.qty, 0);
+  const number = "51982463746"; // Tu número de WhatsApp
 
-  // Número de WhatsApp del negocio
-  const number = "51982463746";
-
-  // Generación del mensaje
-  const lines = cart.map(it => ${it.title} × ${it.qty}).join("%0A");
+  const lines = cart.map(it => `${it.title} × ${it.qty}`).join("%0A");
   const msg = `Hola 👋, me interesa adquirir los siguientes productos:%0A${lines}%0A%0ATotal estimado: S/ ${total.toFixed(
     2
   )}%0A%0AEnviado desde el catálogo oficial de COSSCO — Solo productos de lujo.`;
-  const wa = https://wa.me/${number}?text=${msg};
+  const wa = `https://wa.me/${number}?text=${msg}`;
 
   return (
-    <div className="fixed bottom-4 right-4 z-30 w-[90%] max-w-sm md:max-w-md transition-all duration-300">
-      <div className="border border-plateado/40 bg-white shadow-lg rounded-2xl overflow-hidden">
-        {/* Encabezado */}
-        <div className="flex justify-between items-center p-3 border-b border-plateado/40 bg-dorado/10">
+    <div className="fixed bottom-4 right-4 z-30 w-[90%] max-w-sm md:max-w-md transition-all duration-500 ease-in-out">
+      <div className="rounded-2xl border border-dorado/50 bg-white/90 backdrop-blur-sm shadow-xl overflow-hidden">
+        {/* Encabezado elegante */}
+        <div className="flex justify-between items-center p-3 border-b border-plateado/40 bg-gradient-to-r from-dorado/20 to-transparent">
           <h3 className="font-semibold text-grafito text-base">Tu pedido</h3>
           <button
             onClick={() => setMinimized(!minimized)}
-            className="text-sm font-bold text-dorado hover:text-grafito transition"
+            className="text-sm font-semibold text-dorado hover:text-grafito transition-all"
           >
-            {minimized ? "⯈ Mostrar" : "⯆ Ocultar"}
+            {minimized ? "🛒 Mostrar" : "🔽 Minimizar"}
           </button>
         </div>
 
-        {/* Contenido del carrito */}
+        {/* Contenido */}
         {!minimized && (
-          <div className="p-4">
+          <div className="p-4 max-h-80 overflow-y-auto">
             {cart.length === 0 ? (
-              <p className="text-sm text-plateado">
-                Aún no has agregado productos.
+              <p className="text-sm text-plateado text-center py-4">
+                🛍️ Aún no has agregado productos.
               </p>
             ) : (
               <>
                 {cart.map((it, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between py-2 text-sm"
+                    className="flex items-center justify-between py-2 border-b border-plateado/20 last:border-none text-sm"
                   >
-                    <div className="flex-1">{it.title}</div>
+                    <div className="flex-1 font-medium">{it.title}</div>
 
                     {/* Controles de cantidad */}
                     <div className="flex items-center gap-1">
                       <button
-                        onClick={() =>
-                          onQty(it.title, Math.max(1, it.qty - 1))
-                        }
+                        onClick={() => onQty(it.title, Math.max(1, it.qty - 1))}
                         className="px-2 border border-plateado/40 rounded hover:bg-plateado/10"
                       >
                         -
@@ -90,12 +81,12 @@ export default function CartDrawer({ cart, onRemove, onQty }) {
                 ))}
 
                 {/* Total */}
-                <div className="flex justify-between mt-3 text-sm font-semibold">
+                <div className="flex justify-between mt-4 text-sm font-semibold">
                   <span>Total:</span>
-                  <span>S/ {total.toFixed(2)}</span>
+                  <span className="text-dorado">S/ {total.toFixed(2)}</span>
                 </div>
 
-                {/* Botón de WhatsApp */}
+                {/* Botón WhatsApp */}
                 <a
                   href={wa}
                   target="_blank"
