@@ -2,7 +2,7 @@ import React from 'react'
 function parsePrice(p){if(!p) return 0; const m=String(p).replace(',','.').match(/([0-9]+(?:\.[0-9]+)?)/); return m?parseFloat(m[1]):0}
 export default function CartDrawer({cart,onRemove,onQty}){
   const total=cart.reduce((s,it)=>s+parsePrice(it.price)*it.qty,0)
-  const number="+51932395085"
+  const number="51982463746"
   const lines=cart.map(it=>`• ${it.title} × ${it.qty}`).join('%0A')
   const msg=`Hola 👋, me interesa adquirir los siguientes productos:%0A${lines}%0A%0ATotal estimado: S/ ${total.toFixed(2)}%0A%0AEnviado desde el catálogo oficial de COSSCO — Solo productos de lujo.`
   const wa=`https://wa.me/${number}?text=${msg}`
