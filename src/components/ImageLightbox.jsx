@@ -22,7 +22,7 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
 
   return (
     // Fondo oscuro semi-transparente
-    <div 
+    <div
       // 👇 ¡CAMBIO AQUÍ! 'z-50' se cambió a 'z-[999]' 👇
       className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
       onClick={onClose} // Cierra al hacer clic en el fondo
@@ -44,8 +44,8 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
       </button>
 
       {/* Contenedor de la Imagen (Aquí aplicamos el 'swipe') */}
-      <div 
-        {...handlers} 
+      <div
+        {...handlers}
         className="relative w-full h-full flex items-center justify-center"
         onClick={(e) => e.stopPropagation()} // Evita que el clic en la imagen cierre el modal
       >
@@ -63,6 +63,6 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
       </button>
-    </div>
-  );
-}
+    </div> // <-- ESTE CIERRE FALTABA
+  ); // <-- ESTE CIERRE FALTABA
+} // <-- ESTE CIERRE FALTABA
