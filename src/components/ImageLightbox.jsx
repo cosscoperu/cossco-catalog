@@ -20,10 +20,10 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
   });
 
   return (
-    // Fondo oscuro - Aplicamos handlers aquí
+    // Fondo oscuro - Volvemos a usar Flex para centrar
     <div
       {...handlers}
-      className="fixed inset-0 z-[999] bg-black bg-opacity-80" // Quitamos flex
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80" // <-- Flexbox centrado
       onClick={onClose}
     >
       {/* Botón de Cerrar (X) */}
@@ -42,15 +42,14 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
       </button>
 
-      {/* Imagen con posicionamiento absoluto y transform para centrar */}
-      {/* 👇 ¡CAMBIO PRINCIPAL AQUÍ! 👇 */}
+      {/* Imagen - Dejamos que Flexbox haga el centrado */}
+      {/* Añadimos 'm-auto' por si acaso */}
       <img
         src={images[currentIndex]}
         alt={`Imagen ${currentIndex + 1}`}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[90vw] max-h-[90vh] object-contain" // Centrado absoluto
+        className="block m-auto max-w-[90vw] max-h-[90vh] object-contain" // Quitamos absolute, dejamos que flex centre
         onClick={(e) => e.stopPropagation()}
       />
-      {/* --- FIN CAMBIO --- */}
 
 
       {/* Botón Siguiente (>) */}
