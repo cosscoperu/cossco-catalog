@@ -1,37 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import ImageLightbox from './ImageLightbox'; // <-- 1. Importamos el nuevo componente
 
 // El modal ahora recibe onAdd para el botón de "Añadir al carrito"
 export default function ImageModal({ product, onClose, onAdd }) { 
   if (!product) return null;
 
   // --- LÓGICA DE ESTADO BASADA EN 'colorVariants' ---
-
-  // 1. Estado para saber qué VARIANTE de color está seleccionada (por su índice)
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-
-  // 2. Estado para la TALLA
   const [selectedSize, setSelectedSize] = useState(product.sizes && product.sizes.length > 0 ? product.sizes[0] : null);
-  
-  // 3. Estado para la IMAGEN principal (el índice de la galería izquierda)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // --- 2. NUEVO ESTADO para controlar el Lightbox ---
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   // --- FIN LÓGICA DE ESTADO ---
 
-  // Obtenemos la variante de color activa
   const activeColorVariant = product.colorVariants ? product.colorVariants[selectedVariantIndex] : null;
-
-  // Las imágenes de la galería izquierda AHORA dependen del color seleccionado
   const galleryImages = activeColorVariant ? activeColorVariant.galleryImages : [];
-  
-  // El nombre del color seleccionado
   const selectedColorName = activeColorVariant ? activeColorVariant.colorName : null;
-
 
   // Efecto para resetear los estados cuando el producto cambia
   useEffect(() => {
-    setSelectedVariantIndex(0); // Vuelve al primer color
-    setCurrentImageIndex(0);    // Vuelve a la primera foto de la galería
-    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : null); // Resetea talla
+    setSelectedVariantIndex(0); 
+    setCurrentImageIndex(0);    
+    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : null); 
     
     document.body.style.overflow = 'hidden';
     return () => {
@@ -39,17 +31,15 @@ export default function ImageModal({ product, onClose, onAdd }) {
     };
   }, [product]);
 
-  // Función para cambiar la IMAGEN principal (galería izquierda)
   const goToImage = (index) => {
     if (index >= 0 && index < galleryImages.length) {
       setCurrentImageIndex(index);
     }
   };
 
-  // Función para cambiar el COLOR (selectores derecha)
   const selectColorVariant = (index) => {
     setSelectedVariantIndex(index);
-    setCurrentImageIndex(0); // Resetea la galería a la primera foto del nuevo color
+    setCurrentImageIndex(0); 
   };
 
   // Función para el botón "Añadir al carrito"
@@ -59,12 +49,8 @@ export default function ImageModal({ product, onClose, onAdd }) {
       selectedSize: selectedSize,
       selectedColor: selectedColorName, 
     };
-    onAdd(productToAdd); // Llama a la función onAdd (del App.jsx)
-    
-    // 👇 ¡CAMBIO AQUÍ! Se eliminó la línea 'onClose()' 👇
-    // El modal ya NO se cierra automáticamente.
-    
-    // (Opcional) Podríamos añadir un mensaje de "¡Añadido!"
+    onAdd(productToAdd); 
+    // Ya no se cierra
   };
 
   // --- Verificación de Seguridad ---
@@ -114,7 +100,11 @@ export default function ImageModal({ product, onClose, onAdd }) {
           </div>
 
           {/* Imagen Principal */}
-          <div className="flex-grow flex items-center justify-center overflow-hidden relative order-1 md:order-2 bg-gray-100"> 
+          {/* --- 3. MODIFICACIÓN: Añadido onClick y cursor-zoom-in --- */}
+          <div 
+            className="flex-grow flex items-center justify-center overflow-hidden relative order-1 md:order-2 bg-gray-100 cursor-zoom-in"
+            onClick={() => setIsLightboxOpen(true)} // <-- Abre el Lightbox
+          > 
             <img 
               src={galleryImages[currentImageIndex]} // Muestra la imagen principal
               alt={`${product.title} - ${selectedColorName} ${currentImageIndex + 1}`} 
@@ -128,8 +118,7 @@ export default function ImageModal({ product, onClose, onAdd }) {
           <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
           <div className="text-3xl font-bold text-grafito mb-4">S/ {product.price}</div>
 
-          {/* --- Selector de Color (¡NUEVO!) --- */}
-          {/* Mapea sobre 'colorVariants' para crear los selectores de color */}
+          {/* --- Selector de Color --- */}
           <div className="mt-4">
             <p className="text-sm font-medium text-gray-800 mb-2">Color:</p>
             <div className="flex gap-2 flex-wrap">
@@ -184,6 +173,15 @@ export default function ImageModal({ product, onClose, onAdd }) {
 
         </div>
       </div>
+      
+      {/* --- 4. MODIFICACIÓN: Renderizar el Lightbox si está abierto --- */}
+      {isLightboxOpen && (
+        <ImageLightbox
+          images={galleryImages}
+          startIndex={currentImageIndex}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
     </div>
   );
 }
