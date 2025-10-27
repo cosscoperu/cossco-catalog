@@ -9,7 +9,7 @@ import CartDrawer from "./components/CartDrawer.jsx";
 import AboutSection from "./components/AboutSection.jsx";
 import Footer from "./components/Footer.jsx";
 import AdminPanel from "./components/AdminPanel.jsx";
-import ImageModal from "./components/ImageModal.jsx"; // <--- 1. IMPORTA EL MODAL
+import ImageModal from "./components/ImageModal.jsx";
 
 export default function App() {
   const [query, setQuery] = useState("");
@@ -120,13 +120,17 @@ export default function App() {
           </div>
         </div>
       )}
-      <div className="flex justify-center gap-2 md:gap-4 p-4 mt-4">
+
+      {/* --- DIV DE LOS BOTONES DE CATEGORÍA --- */}
+      {/* 👇 ¡CAMBIO AQUÍ! Añadido overflow-x-auto, justify-start y clases para ocultar scrollbar 👇 */}
+      <div className="flex overflow-x-auto justify-start md:justify-center gap-2 md:gap-4 p-4 mt-4 scrollbar-hide">
         {["Todos", "Hombre", "Mujer", "Niño", "Niña", "Accesorios"].map((categoryName) => (
           <button
             key={categoryName}
             onClick={() => setSelectedCategory(categoryName)}
+            // --- MODIFICACIÓN: Añadido flex-shrink-0 para evitar que se achiquen ---
             className={`
-              px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200
+              flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200
               ${selectedCategory === categoryName
                 ? 'bg-yellow-400 text-gray-900 shadow-md'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -137,13 +141,14 @@ export default function App() {
           </button>
         ))}
       </div>
+      {/* --- FIN DIV BOTONES --- */}
+
 
       <main className="mx-auto max-w-5xl p-4">
-        {/* 👇 CAMBIO 1: Quitamos 'onAdd', ya no es necesario aquí 👇 */}
         <ProductGrid products={products} onImageClick={openModal} />
       </main>
 
-      <div className="h-64 md:h-0" />
+      <div className="h-64 md:h-0" /> {/* Espaciador, verificar si es necesario */}
 
       <AboutSection />
       <Footer />
@@ -151,17 +156,17 @@ export default function App() {
 
       <a
         href="/admin"
-        className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-full text-sm hover:bg-gray-700 shadow-lg"
+        className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded-full text-sm hover:bg-gray-700 shadow-lg z-10" // Añadido z-index
       >
         👑 Admin
       </a>
 
-      {/* 👇 RENDERIZAMOS EL MODAL CONDICIONALMENTE 👇 */}
+      {/* Renderizamos el modal condicionalmente */}
       {isModalOpen && (
-        <ImageModal 
-          product={selectedProductForModal} 
-          onClose={closeModal} 
-          onAdd={addToCart} // <-- CAMBIO 2: Pasamos la función 'addToCart' al modal
+        <ImageModal
+          product={selectedProductForModal}
+          onClose={closeModal}
+          onAdd={addToCart}
         />
       )}
     </div>

@@ -1,9 +1,40 @@
+/** @type {import('tailwindcss').Config} */
 export default {
-  content:["./index.html","./src/**/*.{js,jsx,ts,tsx}"],
-  theme:{extend:{
-    colors:{marfil:"#FAFAF8",dorado:"#C8A45D",doradoHover:"#D6B36B",grafito:"#2E2E2E",plateado:"#B4B4B4"},
-    boxShadow:{suave:"0 8px 24px rgba(0,0,0,0.08)"},
-    fontFamily:{sans:["Poppins","ui-sans-serif","system-ui","Helvetica","Arial","sans-serif"]}
-  }},
-  plugins:[]
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      // Tus colores y sombras
+      colors: {
+        'dorado': '#D4AF37', 
+        'doradoHover': '#E0C160', 
+        'plateado': '#C0C0C0', 
+        'grafito': '#232323', 
+        'marfil': '#FAF3E0', // Añade este si lo usas en App.jsx bg-marfil
+      },
+      boxShadow: {
+        'suave': '0 4px 12px rgba(0, 0, 0, 0.05)',
+      },
+      backgroundImage: {
+        'fondo-lujo': "url('/fondo-lujoso.jpg')", // Lo dejamos por si lo usas
+      }
+    },
+  },
+  // 👇 ¡AÑADE ESTA SECCIÓN 'plugins'! 👇
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* Firefox */
+          'scrollbar-width': 'none',
+          /* Safari and Chrome */
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          }
+        }
+      })
+    }
+  ],
 }
