@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import ImageLightbox from './ImageLightbox'; // <-- 1. Importamos el nuevo componente
+import ImageLightbox from './ImageLightbox'; // Importamos el Lightbox
 
-// El modal ahora recibe onAdd para el botón de "Añadir al carrito"
-export default function ImageModal({ product, onClose, onAdd }) { 
+export default function ImageModal({ product, onClose, onAdd }) {
   if (!product) return null;
 
-  // --- LÓGICA DE ESTADO BASADA EN 'colorVariants' ---
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState(product.sizes && product.sizes.length > 0 ? product.sizes[0] : null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  // --- 2. NUEVO ESTADO para controlar el Lightbox ---
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-
-  // --- FIN LÓGICA DE ESTADO ---
 
   const activeColorVariant = product.colorVariants ? product.colorVariants[selectedVariantIndex] : null;
   const galleryImages = activeColorVariant ? activeColorVariant.galleryImages : [];
   const selectedColorName = activeColorVariant ? activeColorVariant.colorName : null;
 
-  // Efecto para resetear los estados cuando el producto cambia
   useEffect(() => {
-    setSelectedVariantIndex(0); 
-    setCurrentImageIndex(0);    
-    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : null); 
-    
+    setSelectedVariantIndex(0);
+    setCurrentImageIndex(0);
+    setSelectedSize(product.sizes && product.sizes.length > 0 ? product.sizes[0] : null);
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'unset';
@@ -39,82 +31,80 @@ export default function ImageModal({ product, onClose, onAdd }) {
 
   const selectColorVariant = (index) => {
     setSelectedVariantIndex(index);
-    setCurrentImageIndex(0); 
+    setCurrentImageIndex(0);
   };
 
-  // Función para el botón "Añadir al carrito"
   const handleAddToCart = () => {
     const productToAdd = {
       ...product,
       selectedSize: selectedSize,
-      selectedColor: selectedColorName, 
+      selectedColor: selectedColorName,
     };
-    onAdd(productToAdd); 
-    // Ya no se cierra
+    onAdd(productToAdd);
+    // Ya no cierra el modal
   };
 
-  // --- Verificación de Seguridad ---
   if (!product.colorVariants || product.colorVariants.length === 0) {
     console.error("Producto sin 'colorVariants'. No se puede renderizar el modal.", product);
     onClose();
-    return null; 
+    return null;
   }
 
   return (
     // Fondo oscuro
-    <div 
+    <div
       className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
-      onClick={onClose} 
+      onClick={onClose}
     >
-      {/* Contenedor principal del modal (Layout de 2 columnas) */}
-      <div 
-        className="relative bg-white w-full max-w-6xl h-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl overflow-hidden rounded-lg"
-        onClick={(e) => e.stopPropagation()} 
+      {/* Contenedor principal del modal */}
+      <div
+        className="relative bg-white w-full max-w-6xl h-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl overflow-hidden rounded-lg" // <- overflow-hidden aquí es importante
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Botón de cerrar (X) */}
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           className="absolute top-3 right-4 text-gray-400 hover:text-black text-4xl z-20 focus:outline-none"
           aria-label="Cerrar modal"
         >
-          &times; 
+          &times;
         </button>
 
-        {/* --- COLUMNA IZQUIERDA: GALERÍA DE IMÁGENES (DEL COLOR SELECCIONADO) --- */}
-        <div className="w-full md:w-3/5 flex flex-col md:flex-row h-1/2 md:h-full">
-          {/* Miniaturas (Thumbnails) de la galería */}
-          <div className="w-full md:w-20 h-24 md:h-full overflow-x-auto md:overflow-y-auto p-2 flex md:flex-col gap-2 order-2 md:order-1"> 
+        {/* --- COLUMNA IZQUIERDA: GALERÍA DE IMÁGENES --- */}
+        <div className="w-full md:w-3/5 flex flex-col md:flex-row h-1/2 md:h-full"> {/* <- Altura partida en móvil */}
+          {/* Miniaturas */}
+          <div className="w-full md:w-20 h-24 md:h-full overflow-x-auto md:overflow-y-auto p-2 flex md:flex-col gap-2 order-2 md:order-1">
             {galleryImages.map((imgUrl, index) => (
-              <button 
+              <button
                 key={index}
                 onClick={() => goToImage(index)}
-                className={`flex-shrink-0 w-16 h-16 md:w-full md:h-auto aspect-square border-2 block rounded-md overflow-hidden focus:outline-none ${currentImageIndex === index ? 'border-dorado' : 'border-transparent opacity-70 hover:opacity-100'}`} 
+                className={`flex-shrink-0 w-16 h-16 md:w-full md:h-auto aspect-square border-2 block rounded-md overflow-hidden focus:outline-none ${currentImageIndex === index ? 'border-dorado' : 'border-transparent opacity-70 hover:opacity-100'}`}
               >
-                <img 
-                  src={imgUrl} 
-                  alt={`Miniatura ${index + 1}`} 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={imgUrl}
+                  alt={`Miniatura ${index + 1}`}
+                  className="w-full h-full object-cover"
                 />
               </button>
             ))}
           </div>
 
           {/* Imagen Principal */}
-          {/* --- 3. MODIFICACIÓN: Añadido onClick y cursor-zoom-in --- */}
-          <div 
-            className="flex-grow flex items-center justify-center overflow-hidden relative order-1 md:order-2 bg-gray-100 cursor-zoom-in"
-            onClick={() => setIsLightboxOpen(true)} // <-- Abre el Lightbox
-          > 
-            <img 
-              src={galleryImages[currentImageIndex]} // Muestra la imagen principal
-              alt={`${product.title} - ${selectedColorName} ${currentImageIndex + 1}`} 
-              className="max-w-full max-h-full h-full object-contain" 
+          <div
+            className="flex-grow flex items-center justify-center overflow-hidden relative order-1 md:order-2 bg-gray-100 cursor-zoom-in h-full" // <- Asegura h-full
+            onClick={() => setIsLightboxOpen(true)}
+          >
+            <img
+              src={galleryImages[currentImageIndex]}
+              alt={`${product.title} - ${selectedColorName} ${currentImageIndex + 1}`}
+              className="max-w-full max-h-full object-contain" // <- object-contain aquí
             />
           </div>
         </div>
 
         {/* --- COLUMNA DERECHA: DETALLES Y ACCIONES --- */}
-        <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 overflow-y-auto">
+        {/* 👇 ¡CAMBIO AQUÍ! Añadido h-1/2 md:h-full y overflow-y-auto 👇 */}
+        <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 overflow-y-auto"> {/* <- Altura partida y scroll */}
           <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
           <div className="text-3xl font-bold text-grafito mb-4">S/ {product.price}</div>
 
@@ -129,8 +119,8 @@ export default function ImageModal({ product, onClose, onAdd }) {
                   title={variant.colorName}
                   className={`w-16 h-16 rounded-md border-2 overflow-hidden focus:outline-none ${selectedVariantIndex === index ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'}`}
                 >
-                  <img 
-                    src={variant.swatchImage} // Usa la 'swatchImage'
+                  <img
+                    src={variant.swatchImage}
                     alt={variant.colorName}
                     className="w-full h-full object-cover"
                   />
@@ -158,7 +148,7 @@ export default function ImageModal({ product, onClose, onAdd }) {
           )}
 
           {/* --- Botón de Añadir al Carrito --- */}
-          <button 
+          <button
             onClick={handleAddToCart}
             className="mt-6 w-full rounded-xl bg-dorado px-4 py-3 text-base font-semibold text-grafito hover:bg-doradoHover focus:outline-none"
           >
@@ -173,8 +163,8 @@ export default function ImageModal({ product, onClose, onAdd }) {
 
         </div>
       </div>
-      
-      {/* --- 4. MODIFICACIÓN: Renderizar el Lightbox si está abierto --- */}
+
+      {/* Renderizar el Lightbox si está abierto */}
       {isLightboxOpen && (
         <ImageLightbox
           images={galleryImages}
