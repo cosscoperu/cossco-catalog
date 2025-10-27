@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSwipeable } from 'react-swipeable'; // Importamos la librería que instalamos
+import { useSwipeable } from 'react-swipeable';
 
 export default function ImageLightbox({ images, startIndex, onClose }) {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
@@ -12,24 +12,23 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
-  // Aquí configuramos el "swipe"
   const handlers = useSwipeable({
     onSwipedLeft: goToNext,
     onSwipedRight: goToPrevious,
     preventDefaultTouchmoveEvent: true,
-    trackMouse: true // Permite deslizar con el mouse en PC
+    trackMouse: true
   });
 
   return (
-    // Fondo oscuro semi-transparente - Aplicamos handlers aquí
+    // Fondo oscuro - Aplicamos handlers aquí
     <div
-      {...handlers} // <-- Aplicamos swipe al fondo principal
-      className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
-      onClick={onClose} // Cierra al hacer clic en el fondo
+      {...handlers}
+      className="fixed inset-0 z-[999] bg-black bg-opacity-80" // Quitamos flex
+      onClick={onClose}
     >
       {/* Botón de Cerrar (X) */}
       <button
-        className="absolute top-4 right-4 text-white text-4xl z-[1001]" // Aseguramos que esté encima de todo
+        className="absolute top-4 right-4 text-white text-4xl z-[1001]"
         onClick={onClose}
       >
         &times;
@@ -43,14 +42,16 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
       </button>
 
-      {/* Imagen directamente centrada por el flex container */}
-      {/* Ya no hay un div intermedio */}
+      {/* Imagen con posicionamiento absoluto y transform para centrar */}
+      {/* 👇 ¡CAMBIO PRINCIPAL AQUÍ! 👇 */}
       <img
         src={images[currentIndex]}
         alt={`Imagen ${currentIndex + 1}`}
-        className="max-w-[90vw] max-h-[90vh] object-contain" // La imagen se ajusta a la pantalla
-        onClick={(e) => e.stopPropagation()} // Evita que el clic en la imagen cierre el modal
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[90vw] max-h-[90vh] object-contain" // Centrado absoluto
+        onClick={(e) => e.stopPropagation()}
       />
+      {/* --- FIN CAMBIO --- */}
+
 
       {/* Botón Siguiente (>) */}
       <button
