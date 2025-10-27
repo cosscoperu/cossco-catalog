@@ -4,14 +4,15 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "build": "node node_modules/vite/bin/vite.js build",
-  "preview": "vite preview"
-},
+    "dev": "vite",
+    "build": "node node_modules/vite/bin/vite.js build",
+    "preview": "vite preview"
+  },
   "engines": {
     "node": "22.x"
   },
   "dependencies": {
+    "firebase": "^12.4.0",
     "framer-motion": "^10.18.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
