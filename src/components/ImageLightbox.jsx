@@ -23,7 +23,8 @@ export default function ImageLightbox({ images, startIndex, onClose }) {
   return (
     // Fondo oscuro semi-transparente
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+      // 👇 ¡CAMBIO AQUÍ! 'z-50' se cambió a 'z-[999]' 👇
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-80"
       onClick={onClose} // Cierra al hacer clic en el fondo
     >
       {/* Botón de Cerrar (X) */}
