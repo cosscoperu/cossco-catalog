@@ -103,12 +103,12 @@ export default function ImageModal({ product, onClose, onAdd }) {
         </div>
 
         {/* --- COLUMNA DERECHA: DETALLES Y ACCIONES --- */}
-        {/* 👇 ¡CAMBIO AQUÍ! Añadido 'flex flex-col' para distribuir espacio 👇 */}
-        <div className="w-full md:w-2/5 h-1/2 md:h-full flex flex-col"> {/* <- Contenedor flex vertical */}
+        {/* Contenedor flex vertical */}
+        <div className="w-full md:w-2/5 h-1/2 md:h-full flex flex-col">
 
           {/* Área de Contenido Scrollable */}
-          {/* 👇 Añadido 'overflow-y-auto flex-grow' 👇 */}
-          <div className="p-6 overflow-y-auto flex-grow">
+          {/* 👇 ¡CAMBIO AQUÍ! Añadido min-h-0 para permitir encogimiento 👇 */}
+          <div className="p-6 overflow-y-auto flex-grow min-h-0">
             <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
             <div className="text-3xl font-bold text-grafito mb-4">S/ {product.price}</div>
 
@@ -159,27 +159,8 @@ export default function ImageModal({ product, onClose, onAdd }) {
           </div> {/* <-- Fin del área scrollable */}
 
           {/* Área del Botón Fijo */}
-          {/* 👇 Añadido 'p-6 border-t' y quitado 'mt-6' del botón 👇 */}
-          <div className="p-6 border-t border-gray-200">
+          {/* 👇 Añadido flex-shrink-0 para evitar que se encoja 👇 */}
+          <div className="p-6 border-t border-gray-200 flex-shrink-0">
             <button
               onClick={handleAddToCart}
-              className="w-full rounded-xl bg-dorado px-4 py-3 text-base font-semibold text-grafito hover:bg-doradoHover focus:outline-none"
-            >
-              Agregar al pedido
-            </button>
-          </div>
-
-        </div> {/* <-- Fin columna derecha */}
-      </div> {/* <-- Fin contenedor principal */}
-
-      {/* Renderizar el Lightbox si está abierto */}
-      {isLightboxOpen && (
-        <ImageLightbox
-          images={galleryImages}
-          startIndex={currentImageIndex}
-          onClose={() => setIsLightboxOpen(false)}
-        />
-      )}
-    </div>
-  );
-}
+              className="w-full rounded-xl
