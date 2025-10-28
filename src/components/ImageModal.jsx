@@ -58,7 +58,7 @@ export default function ImageModal({ product, onClose, onAdd }) {
     >
       {/* Contenedor principal del modal */}
       <div
-        className="relative bg-white w-full max-w-6xl h-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl overflow-hidden rounded-lg" // <- overflow-hidden aquí es importante
+        className="relative bg-white w-full max-w-6xl h-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl overflow-hidden rounded-lg" // <- overflow-hidden aquí
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botón de cerrar (X) */}
@@ -103,66 +103,74 @@ export default function ImageModal({ product, onClose, onAdd }) {
         </div>
 
         {/* --- COLUMNA DERECHA: DETALLES Y ACCIONES --- */}
-        {/* 👇 ¡CAMBIO AQUÍ! Añadido h-1/2 md:h-full y overflow-y-auto 👇 */}
-        <div className="w-full md:w-2/5 h-1/2 md:h-full p-6 overflow-y-auto"> {/* <- Altura partida y scroll */}
-          <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
-          <div className="text-3xl font-bold text-grafito mb-4">S/ {product.price}</div>
+        {/* 👇 ¡CAMBIO AQUÍ! Añadido 'flex flex-col' para distribuir espacio 👇 */}
+        <div className="w-full md:w-2/5 h-1/2 md:h-full flex flex-col"> {/* <- Contenedor flex vertical */}
 
-          {/* --- Selector de Color --- */}
-          <div className="mt-4">
-            <p className="text-sm font-medium text-gray-800 mb-2">Color:</p>
-            <div className="flex gap-2 flex-wrap">
-              {product.colorVariants.map((variant, index) => (
-                <button
-                  key={index}
-                  onClick={() => selectColorVariant(index)}
-                  title={variant.colorName}
-                  className={`w-16 h-16 rounded-md border-2 overflow-hidden focus:outline-none ${selectedVariantIndex === index ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'}`}
-                >
-                  <img
-                    src={variant.swatchImage}
-                    alt={variant.colorName}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* Área de Contenido Scrollable */}
+          {/* 👇 Añadido 'overflow-y-auto flex-grow' 👇 */}
+          <div className="p-6 overflow-y-auto flex-grow">
+            <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
+            <div className="text-3xl font-bold text-grafito mb-4">S/ {product.price}</div>
 
-          {/* --- Selector de Talla --- */}
-          {product.sizes && product.sizes.length > 0 && (
+            {/* --- Selector de Color --- */}
             <div className="mt-4">
-              <p className="text-sm font-medium text-gray-800 mb-2">Talla:</p>
+              <p className="text-sm font-medium text-gray-800 mb-2">Color:</p>
               <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((sizeOption, sizeIdx) => (
+                {product.colorVariants.map((variant, index) => (
                   <button
-                    key={sizeIdx}
-                    onClick={() => setSelectedSize(sizeOption)}
-                    className={`px-4 py-2 text-sm font-medium rounded border-2 focus:outline-none ${selectedSize === sizeOption ? 'bg-grafito text-white border-grafito' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+                    key={index}
+                    onClick={() => selectColorVariant(index)}
+                    title={variant.colorName}
+                    className={`w-16 h-16 rounded-md border-2 overflow-hidden focus:outline-none ${selectedVariantIndex === index ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'}`}
                   >
-                    {sizeOption}
+                    <img
+                      src={variant.swatchImage}
+                      alt={variant.colorName}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
             </div>
-          )}
 
-          {/* --- Botón de Añadir al Carrito --- */}
-          <button
-            onClick={handleAddToCart}
-            className="mt-6 w-full rounded-xl bg-dorado px-4 py-3 text-base font-semibold text-grafito hover:bg-doradoHover focus:outline-none"
-          >
-            Agregar al pedido
-          </button>
+            {/* --- Selector de Talla --- */}
+            {product.sizes && product.sizes.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm font-medium text-gray-800 mb-2">Talla:</p>
+                <div className="flex gap-2 flex-wrap">
+                  {product.sizes.map((sizeOption, sizeIdx) => (
+                    <button
+                      key={sizeIdx}
+                      onClick={() => setSelectedSize(sizeOption)}
+                      className={`px-4 py-2 text-sm font-medium rounded border-2 focus:outline-none ${selectedSize === sizeOption ? 'bg-grafito text-white border-grafito' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+                    >
+                      {sizeOption}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          {/* Descripción (Opcional) */}
-          <div className="mt-6 text-sm text-gray-600">
-            <h3 className="font-semibold mb-1">Descripción</h3>
-            <p>{product.description || "Descripción no disponible."}</p>
+            {/* Descripción (Opcional) */}
+            <div className="mt-6 text-sm text-gray-600">
+              <h3 className="font-semibold mb-1">Descripción</h3>
+              <p>{product.description || "Descripción no disponible."}</p>
+            </div>
+          </div> {/* <-- Fin del área scrollable */}
+
+          {/* Área del Botón Fijo */}
+          {/* 👇 Añadido 'p-6 border-t' y quitado 'mt-6' del botón 👇 */}
+          <div className="p-6 border-t border-gray-200">
+            <button
+              onClick={handleAddToCart}
+              className="w-full rounded-xl bg-dorado px-4 py-3 text-base font-semibold text-grafito hover:bg-doradoHover focus:outline-none"
+            >
+              Agregar al pedido
+            </button>
           </div>
 
-        </div>
-      </div>
+        </div> {/* <-- Fin columna derecha */}
+      </div> {/* <-- Fin contenedor principal */}
 
       {/* Renderizar el Lightbox si está abierto */}
       {isLightboxOpen && (
