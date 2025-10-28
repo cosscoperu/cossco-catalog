@@ -107,13 +107,16 @@ export default function ImageModal({ product, onClose, onAdd }) {
         <div className="w-full md:w-2/5 h-1/2 md:h-full flex flex-col">
 
           {/* Área de Contenido Scrollable */}
-          {/* Añadido min-h-0 para permitir encogimiento */}
-          <div className="p-6 overflow-y-auto flex-grow min-h-0">
-            <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
-            <div className="text-3xl font-bold text-grafito mb-4">S/ {product.price}</div>
+          {/* 👇 ¡CAMBIO! Padding reducido a p-4 👇 */}
+          <div className="p-4 overflow-y-auto flex-grow min-h-0">
+            {/* Reducido mb-2 */}
+            <h2 className="text-xl md:text-2xl font-semibold mb-1">{product.title}</h2>
+            {/* Reducido mb-4 a mb-3 */}
+            <div className="text-2xl md:text-3xl font-bold text-grafito mb-3">S/ {product.price}</div>
 
             {/* --- Selector de Color --- */}
-            <div className="mt-4">
+            {/* Reducido mt-4 a mt-3 */}
+            <div className="mt-3">
               <p className="text-sm font-medium text-gray-800 mb-2">Color:</p>
               <div className="flex gap-2 flex-wrap">
                 {product.colorVariants.map((variant, index) => (
@@ -121,7 +124,8 @@ export default function ImageModal({ product, onClose, onAdd }) {
                     key={index}
                     onClick={() => selectColorVariant(index)}
                     title={variant.colorName}
-                    className={`w-16 h-16 rounded-md border-2 overflow-hidden focus:outline-none ${selectedVariantIndex === index ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'}`}
+                    /* Reducido tamaño de botones de color */
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-md border-2 overflow-hidden focus:outline-none ${selectedVariantIndex === index ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'}`}
                   >
                     <img
                       src={variant.swatchImage}
@@ -134,8 +138,9 @@ export default function ImageModal({ product, onClose, onAdd }) {
             </div>
 
             {/* --- Selector de Talla --- */}
+            {/* Reducido mt-4 a mt-3 */}
             {product.sizes && product.sizes.length > 0 && (
-              <div className="mt-4">
+              <div className="mt-3">
                 <p className="text-sm font-medium text-gray-800 mb-2">Talla:</p>
                 <div className="flex gap-2 flex-wrap">
                   {product.sizes.map((sizeOption, sizeIdx) => (
@@ -152,22 +157,24 @@ export default function ImageModal({ product, onClose, onAdd }) {
             )}
 
             {/* Descripción (Opcional) */}
-            <div className="mt-6 text-sm text-gray-600">
+            {/* Reducido mt-6 a mt-4 */}
+            <div className="mt-4 text-sm text-gray-600">
               <h3 className="font-semibold mb-1">Descripción</h3>
               <p>{product.description || "Descripción no disponible."}</p>
             </div>
           </div> {/* <-- Fin del área scrollable */}
 
           {/* Área del Botón Fijo */}
-          {/* Añadido flex-shrink-0 para evitar que se encoja */}
-          <div className="p-6 border-t border-gray-200 flex-shrink-0">
+          {/* 👇 ¡CAMBIO! Padding reducido a p-4 👇 */}
+          <div className="p-4 border-t border-gray-200 flex-shrink-0">
             <button
               onClick={handleAddToCart}
-              className="w-full rounded-xl bg-dorado px-4 py-3 text-base font-semibold text-grafito hover:bg-doradoHover focus:outline-none"
+              /* Reducido padding vertical py-3 a py-2.5 */
+              className="w-full rounded-xl bg-dorado px-4 py-2.5 text-base font-semibold text-grafito hover:bg-doradoHover focus:outline-none"
             >
               Agregar al pedido
             </button>
-          </div> {/* <-- CIERRE DIV BOTON */}
+          </div>
 
         </div> {/* <-- Fin columna derecha */}
       </div> {/* <-- Fin contenedor principal */}
@@ -180,6 +187,6 @@ export default function ImageModal({ product, onClose, onAdd }) {
           onClose={() => setIsLightboxOpen(false)}
         />
       )}
-    </div> // <-- CIERRE DIV FONDO OSCURO
-  ); // <-- CIERRE RETURN
-} // <-- CIERRE COMPONENTE
+    </div>
+  );
+}
